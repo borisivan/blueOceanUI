@@ -1,0 +1,80 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('repo activity') {
+      environment {
+        stageParent = 'repo activity'
+      }
+      failFast true
+      parallel {
+        stage('c') {
+          stages {
+            stage('git:c3') {
+              steps {
+                sleep 10
+              }
+            }
+            stage('git:s1') {
+              steps {
+                sleep 30
+              }
+            }
+          }
+        }
+        stage('s') {
+          stages {
+            stage('git:s2') {
+              steps {
+                sleep 10
+              }
+            }
+            stage('git:e') {
+              steps {
+                sleep 30
+              }
+            }
+          }
+        }
+        stage('b') {
+          stages {
+            stage('git:b') {
+              steps {
+                sleep 30
+              }
+            }
+            stage('git:c1') {
+              steps {
+                sleep 10
+              }
+            }
+          }
+        }
+        stage('u') {
+          stages {
+            stage('git:u') {
+              steps {
+                sleep 10
+              }
+            }
+            stage('git:c2') {
+              steps {
+                sleep 30
+              }
+            }
+          }
+        }
+        stage('git:d') {
+          steps {
+            sleep 10
+          }
+        }
+      }
+      post {
+        always {
+          echo "sending to slack"
+        }
+      }
+    }
+  }
+}
